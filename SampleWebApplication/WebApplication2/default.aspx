@@ -10,7 +10,7 @@
     <form id="form1" runat="server">
         <div>
             <h1>Azure DevOps and Terraform Assignment</h1>
-            <h2>Sample By Ranadeep Reddy</h2>
+            <h2>Sample By kushagra</h2>
             <h4>Neudesic Cloud Transformation Project</h4>
         </div>
     </form>
