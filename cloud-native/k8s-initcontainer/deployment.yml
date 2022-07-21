@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: appmodinitdeployment
+spec:
+  selector:
+    matchLabels:
+      app: appmodinitpod
+  template:
+    metadata:
+      labels:
+        app: appmodinitpod
+    spec:
+      volumes:
+      - name: model-volume
+        emptyDir: {}
+      initContainers:
+      - name: model-init
+        image: datainit:v1
+        imagePullPolicy: IfNotPresent
+        command: ["/bin/sh"]
+        args: ["-c", "cp /usr/src/Data/* /Data"]
+        volumeMounts:
+        - name: model-volume
+          mountPath: "/Data"
+      containers:
+      - name: netcoreweatherapicontainer
+        image: netcoreweatherapicontainer:v1
+        imagePullPolicy: IfNotPresent
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: model-volume
+          mountPath: /app/Data
+
+
+      
