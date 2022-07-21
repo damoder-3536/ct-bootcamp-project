@@ -7,7 +7,7 @@ The final goal of this exercise is to deploy a .net core web api application wit
 ![App-mod-kubernetes](./docs/images/Neudesic-Cloud-Native-Kubernetes.jpg)
 
 ### Prerequisite
-- Neudesic app mod repo (https://github.com/NeudesicIndia/app-mod-accelerators)
+- Neudesic cloud-transformation repo (https://github.com/cloud-transformation/ct-bootcamp-project)
 - A Kubernetes cluster (Minikube, k3s, Kubernetes on Docker Desktop or any cloud provided cluster)
 - Docker daemon running in your machine
 - Access to any Docker registry (Dockerhub)
@@ -30,9 +30,9 @@ The final goal of this exercise is to deploy a .net core web api application wit
 
 Any cloud native application starts with containerizing the application. Lets create a docker image for the given dotnet application using the Dockerfile in the accelererator.
 
-Clone the repo - `git clone https://github.com/NeudesicIndia/app-mod-accelerators`
+Clone the repo - `git clone https://github.com/cloud-transformation/ct-bootcamp-project.git`
 
-Use the branch - `cn/release-v0.2.0`
+Use the branch - `main`
 
 In the directory `cloud-native/src/dotnet/webapi.dotnet` you can find the multi-stage Dockerfile, which we are using to create the image.
 
