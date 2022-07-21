@@ -1,0 +1,15 @@
+version: "3.4"
+
+services: 
+  nodejs:
+    container_name: nodejs-app
+    restart: always
+    image: ${REGISTRY:-neuappmode}/nodejs:${TAG:-12-alpine}-${PLATFORM:-linux}
+    build:
+      context: .
+    environment: 
+      - PORT=${PORT}
+      - NODE_ENV="production"
+    ports: 
+      - ${PORT}:${PORT}
+    

@@ -1,0 +1,95 @@
+# Values for dotnet microservice Helm Chart.
+# ------------------------------------------------------------------------------
+
+
+# Specify the name of the microservice here, all resource's name will be overrided by this name
+fullnameOverride: neuappmod-todo-v2
+
+# Specify the specs for application container
+# Repository should be the name of the hosted docker image along with the appropriate tag
+# In case of a private registry, make use of imagePullSecrets. kubernetes secret is a prerequisite for that.
+# PullPolicy can be one of IfNotPresent, Always, Never 
+image:
+  repository: anujsehgal/neuappmod-dotnet-webapi
+  tag: "1.3"
+  pullPolicy: Always
+
+# Specify the details of the service type and port
+# Service type can be LoadBalancer, ClusterIP and NodePort
+service:
+  type: ClusterIP
+  port: 8080
+
+# Health probe configurations - readinessProbe and livenessProbe
+# - Enable it if probes are required
+# - provide custom endpoint for each probe and other necessary configurarions
+probes:
+  readinessProbe:
+    enabled: true
+    endpoint: /health/readiness
+    initialDelaySeconds: 10
+    timeoutSeconds: 20
+    periodSeconds: 10
+
+  livenessProbe:
+    enabled: true
+    endpoint: /health/liveness
+    initialDelaySeconds: 10
+    timeoutSeconds: 20
+    periodSeconds: 10
+
+# Specify the securitycontext for the Applications Pod
+podSecurityContext: 
+  runAsUser: 1000
+  runAsGroup: 3000
+
+# Ingress rules for the microservice for the Traefik Ingress Controller
+# Enable the ingress rule if Ingress Controller has been setup in the cluster
+##
+# - Specify all annotations for the ingress
+# - path : specify route path for the microservice
+ingress:
+  enabled: false
+  annotations:
+    kubernetes.io/ingress.class: traefik
+  path: /
+  
+# ConfigMap - Application container
+# Specify all the environment variables for the app container
+configmapEnv: 
+  ASPNETCORE_URLS: "http://*:8080"
+  ASPNETCORE_ENVIRONMENT: Docker
+  MongoDB__Database: TodoDB
+  MongoDB__Host: mongodb.default
+  MongoDB__Port: 27017
+
+# Secrets - Application container
+# Specify all the secrets.
+# Following will be mounted as environment variables to the container
+secrets:
+  MongoDB__User: QfVwGUknc1rY5LvvI4WgPT8fCMNRYW
+  MongoDB__Password: 3uf8aPKGobbL1Q3CVDbzYLTcKI2Phl
+
+# Set the resource limits and request for container QoS
+resources:
+  limits:
+    cpu: 300m
+    memory: 500Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+# Specify the details for Microservice to pod autoscale
+# - Enable it if horizontal pod scaling is required
+# - Minimum replicas is the minimum count of the pod replicas for the particular deployment
+# - Maximum replicas is the maximum count of the pod replicas for the particular deployment
+# - CPU target average utilization is the threshold value for CPU utilization % when the kubernetes will scale up
+# - Memory target average utilization is the threshold value for Memory utilization when the kubernetes will scale up
+autoscale:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 5
+  cpu:
+    targetAverageUtilization: 40
+  memory:
+    targetAverageValue: 200Mi

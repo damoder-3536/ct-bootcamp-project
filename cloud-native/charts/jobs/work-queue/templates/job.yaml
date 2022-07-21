@@ -1,0 +1,38 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ include "jobs.fullname" . }}
+  labels:
+    {{- include "jobs.labels" . | nindent 4 }}
+spec:
+  completions:  {{ .Values.completions }}
+  parallelism: {{ .Values.parallelism }}
+  backoffLimit: {{ .Values.backoffLimit }}
+  activeDeadlineSeconds: {{ .Values.activeDeadlineSeconds }}
+  ttlSecondsAfterFinished: {{ .Values.ttlSecondsAfterFinished }}
+  template:
+    metadata:
+      labels:
+        {{- include "jobs.selectorLabels" . | nindent 8 }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ include "jobs.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}          
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+            - name: BROKER_URL
+              value: {{ .Values.brokerUrl }}
+            - name: QUEUE
+              value: {{ .Values.queue }}
+          restartPolicy: {{ .Values.restartPolicy }}

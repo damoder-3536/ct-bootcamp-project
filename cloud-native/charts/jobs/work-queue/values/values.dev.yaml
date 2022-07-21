@@ -1,0 +1,26 @@
+# the completion count of the Job corresponds to the number of work items done.
+completions: 8
+
+# The number of parallel executions
+parallelism: 2
+
+# The AMQP broker URL
+brokerUrl: amqp://guest:guest@rabbitmq-service:5672
+
+# The jobs queue name
+queue: jobs
+
+# Restart policy for the POD
+restartPolicy: OnFailure
+
+# The back off limit if the job is retried
+backoffLimit: 5
+
+# The deadline in seconds for the job to complete, Note that a Job's .spec.activeDeadlineSeconds takes precedence over its .spec.backoffLimit. 
+# Therefore, a Job that is retrying one or more failed Pods will not deploy additional Pods once it reaches the time limit specified by activeDeadlineSeconds, even if the backoffLimit is not yet reached.
+activeDeadlineSeconds: 100
+
+# When the TTL controller cleans up the Job, 
+# it will delete the Job cascadingly, i.e. delete its dependent objects, such as Pods, together with the Job. 
+# Note that when the Job is deleted, its lifecycle guarantees, such as finalizers, will be honored.
+ttlSecondsAfterFinished: 100
