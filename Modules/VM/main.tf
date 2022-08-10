@@ -40,7 +40,7 @@ os_disk {
     storage_account_type = "Standard_LRS"
   }
   
-  source_image_id = "/subscriptions/04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a/resourceGroups/dm-resourcegroup/providers/Microsoft.Compute/images/dm-packer-image"
+  source_image_id = "/subscriptions/04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a/resourceGroups/dm-resourcegroup/providers/Microsoft.Compute/images/dm-PackerImage"
   
 }
 
