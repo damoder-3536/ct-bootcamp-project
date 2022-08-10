@@ -24,3 +24,20 @@ variable "vnet_name" {
   description="Virtual Network Name"
   
 }
+
+variable "nsg_rules" {
+  type = list(object({
+    name  = string
+    priority  = number
+    direction = string
+    access  = string
+    protocol   = string
+    source_port_range   = string
+    destination_port_range  = string
+    source_address_prefix = string
+    description_address_prefix = string
+
+  }))
+  
+  description = "The values for each NSG  rule"
+}
