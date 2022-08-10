@@ -1,0 +1,5 @@
+NSG_Name="DMNSG"
+NSG_Location="CentralIndia"
+resource_group_name="dm-rg"
+subnetname="Subnet1"
+vnet_name="dm-vnet"

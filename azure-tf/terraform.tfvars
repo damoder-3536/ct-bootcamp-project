@@ -1,0 +1,11 @@
+vnet_name               = "dm-vnet"
+resource_group_name     = "dm-rg"
+resource_group_location = "CentralIndia"
+subnetname              = "Subnet1"
+NSG_Name                = "DMNSG"
+NIC                     = "MyNIC"
+VmName                  = "VirtualMachine"
+VMIP                    = "VMIP"
+address_space           = ["10.0.0.0/16"]
+address_prefixes        = ["10.0.1.0/24"]
+NSG_Location            = "CentralIndia"
