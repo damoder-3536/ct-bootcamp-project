@@ -34,7 +34,7 @@ stages:
       inputs:
         terraformVersion: 'latest'
 
-    - 
+
     - task: TerraformTaskV3@3
       inputs:
         provider: 'azurerm'
