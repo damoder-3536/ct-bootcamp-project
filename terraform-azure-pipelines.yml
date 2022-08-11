@@ -5,13 +5,13 @@ trigger:
 pool: linux-agent-pool
 
 stages:
-- stage: 'Install Terraform'
+- stage: TerraformInitialize
   jobs:
-  - job: 'Install_Terraform'
+  - job: InitTerraform
     continueOnError: False
     steps:
     - task: TerraformInstaller@0
-      displayName: 'Install'
+      displayName: 'Terraform Install'
       inputs:
         terraformVersion: 'latest'
     - task: TerraformTaskV3@3
@@ -24,9 +24,36 @@ stages:
         backendAzureRmContainerName: 'tfstate'
         backendAzureRmKey: 'terraform.tfstate'
 
-- stage: 'Plan Terraform'
+- stage: TerraformValidate
   jobs:
-  - job:
+  - job: Validate
+    steps:
+    
+    - task: TerraformInstaller@0
+      displayName: 'Terraform Install'
+      inputs:
+        terraformVersion: 'latest'
+
+    - 
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+        backendAzureRmResourceGroupName: 'dm-resourcegroup'
+        backendAzureRmStorageAccountName: 'dmstorageaccount3536'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+    
+
+
+- stage: Plan
+  jobs:
+  - job: Plan
     steps:
      - task: TerraformInstaller@0
        displayName: 'Plan'
@@ -48,9 +75,9 @@ stages:
          command: 'plan'
          environmentServiceNameAzureRM: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
       
-- stage: 'Apply Terraform'
+- stage: Apply
   jobs:
-  - job:
+  - job: Apply
     steps:
       - task: TerraformInstaller@0
         displayName: 'Apply'
