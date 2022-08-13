@@ -1,0 +1,107 @@
+# Starter pipeline
+trigger:
+- none
+
+pool: linux-agent-pool
+
+stages:
+- stage: TerraformInitialize
+  jobs:
+  - job: InitTerraform
+    continueOnError: False
+    steps:
+    - task: TerraformInstaller@0
+      displayName: 'Terraform Install'
+      inputs:
+        terraformVersion: 'latest'
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+        backendAzureRmResourceGroupName: 'dm-resourcegroup'
+        backendAzureRmStorageAccountName: 'dmstorageaccount3536'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
+
+- stage: TerraformValidate
+  jobs:
+  - job: Validate
+    steps:
+    
+    - task: TerraformInstaller@0
+      displayName: 'Terraform Install'
+      inputs:
+        terraformVersion: 'latest'
+
+
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+        backendAzureRmResourceGroupName: 'dm-resourcegroup'
+        backendAzureRmStorageAccountName: 'dmstorageaccount3536'
+        backendAzureRmContainerName: 'tfstate'
+        backendAzureRmKey: 'terraform.tfstate'
+    - task: TerraformTaskV3@3
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+    
+
+
+- stage: Plan
+  jobs:
+  - job: Plan
+    steps:
+     - task: TerraformInstaller@0
+       displayName: 'Plan'
+       inputs:
+         terraformVersion: 'latest'
+     - task: TerraformTaskV3@3
+       inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+          backendAzureRmResourceGroupName: 'dm-resourcegroup'
+          backendAzureRmStorageAccountName: 'dmstorageaccount3536'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: 'terraform.tfstate'
+        
+     - task: TerraformTaskV3@3
+       inputs:
+         provider: 'azurerm'
+         command: 'plan'
+         environmentServiceNameAzureRM: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+      
+- stage: Apply
+  jobs:
+  - job: Apply
+    steps:
+      - task: TerraformInstaller@0
+        displayName: 'Apply'
+        inputs:
+          terraformVersion: 'latest'
+
+      - task: TerraformTaskV3@3
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+          backendAzureRmResourceGroupName: 'dm-resourcegroup'
+          backendAzureRmStorageAccountName: 'dmstorageaccount3536'
+          backendAzureRmContainerName: 'tfstate'
+          backendAzureRmKey: 'terraform.tfstate'
+        
+      - task: TerraformTaskV3@3
+        inputs:
+            provider: 'azurerm'
+            command: 'plan'
+            environmentServiceNameAzureRM: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
+    
+      - task: TerraformTaskV3@3
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          environmentServiceNameAzureRM: 'VS-Prof-Dev-173 (04b46bc5-5e1b-45ed-8d06-1a6eeecddd8a)'
